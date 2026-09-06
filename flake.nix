@@ -26,6 +26,7 @@
   in {
     packages = eachSystem (system: {
       inherit (pkgsFor.${system}) helix;
+      devenv = pkgsFor.${system}.devenv;
       /*
       The default Helix build. Uses the latest stable Rust toolchain, and unstable
       nixpkgs.
@@ -42,8 +43,9 @@
     });
     checks =
       lib.mapAttrs (system: pkgs: let
-        # Get Helix's MSRV toolchain to build with by default.
-        msrvToolchain = pkgs.pkgsBuildHost.rust-bin.fromRustupToolchainFile ./rust-toolchain.toml;
+        # Packaging checks use the workspace MSRV, independently of the development toolchain.
+        msrv = (builtins.fromTOML (builtins.readFile ./Cargo.toml)).workspace.package.rust-version;
+        msrvToolchain = pkgs.pkgsBuildHost.rust-bin.stable."${msrv}.0".default;
         msrvPlatform = pkgs.makeRustPlatform {
           cargo = msrvToolchain;
           rustc = msrvToolchain;
@@ -52,36 +54,6 @@
         helix = self.packages.${system}.helix.override {
           rustPlatform = msrvPlatform;
         };
-      })
-      pkgsFor;
-
-    # Devshell behavior is preserved.
-    devShells =
-      lib.mapAttrs (system: pkgs: {
-        default = let
-          commonRustFlagsEnv = "-C link-arg=-fuse-ld=lld -C target-cpu=native --cfg tokio_unstable";
-          platformRustFlagsEnv = lib.optionalString pkgs.stdenv.isLinux "-Clink-arg=-Wl,--no-rosegment";
-        in
-          pkgs.mkShell {
-            inputsFrom = [
-              (self.checks.${system}.helix.override {
-                includeGrammarIf = _: false;
-              })
-            ];
-            nativeBuildInputs = with pkgs;
-              [
-                lld
-                cargo-flamegraph
-                rust-bin.nightly.latest.rust-analyzer
-                mdbook
-              ]
-              ++ (lib.optional (stdenv.isx86_64 && stdenv.isLinux) cargo-tarpaulin)
-              ++ (lib.optional stdenv.isLinux lldb);
-            shellHook = ''
-              export RUST_BACKTRACE="1"
-              export RUSTFLAGS="''${RUSTFLAGS:-""} ${commonRustFlagsEnv} ${platformRustFlagsEnv}"
-            '';
-          };
       })
       pkgsFor;
 
