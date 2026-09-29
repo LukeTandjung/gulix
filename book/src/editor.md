@@ -445,13 +445,14 @@ There are currently no options for this section.
 ### `[editor.soft-wrap]` Section
 
 Options for soft wrapping lines that exceed the view width:
+Gulix wraps at the viewport edge by default. Continuation rows have no line number or wrap marker. Set `enable = false` to use horizontal scrolling.
 
 | Key                  | Description                                                  | Default |
 | ---                  | ---                                                          | ---     |
-| `enable`             | Whether soft wrapping is enabled.                            | `false` |
+| `enable`             | Whether soft wrapping is enabled.                            | `true` |
 | `max-wrap`           | Maximum free space left at the end of the line.              | `20`    |
 | `max-indent-retain`  | Maximum indentation to carry over when soft wrapping a line. | `40`    |
-| `wrap-indicator`     | Text inserted before soft wrapped lines, highlighted with `ui.virtual.wrap` | `"↪ "`    |
+| `wrap-indicator`     | Text inserted before soft wrapped lines, highlighted with `ui.virtual.wrap` | `""` |
 | `wrap-at-text-width` | Soft wrap at `text-width` instead of using the full viewport size. | `false` |
 
 Example:

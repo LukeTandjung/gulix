@@ -2380,7 +2380,7 @@ impl Document {
         let enable_soft_wrap = language_soft_wrap
             .and_then(|soft_wrap| soft_wrap.enable)
             .or(editor_soft_wrap.enable)
-            .unwrap_or(false);
+            .unwrap_or(true);
         let max_wrap = language_soft_wrap
             .and_then(|soft_wrap| soft_wrap.max_wrap)
             .or(config.soft_wrap.max_wrap)
@@ -2392,7 +2392,7 @@ impl Document {
         let wrap_indicator = language_soft_wrap
             .and_then(|soft_wrap| soft_wrap.wrap_indicator.clone())
             .or_else(|| config.soft_wrap.wrap_indicator.clone())
-            .unwrap_or_else(|| "↪ ".into());
+            .unwrap_or_default();
         let tab_width = self.tab_width() as u16;
         TextFormat {
             soft_wrap: enable_soft_wrap && viewport_width > 10,

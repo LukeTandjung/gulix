@@ -137,6 +137,19 @@ impl Prompt {
         &self.line
     }
 
+    /// Read-only prompt presentation data for native frontends.
+    pub(crate) fn prefix(&self) -> &str {
+        &self.prompt
+    }
+
+    pub(crate) fn completions(&self) -> &[Completion] {
+        &self.completion
+    }
+
+    pub(crate) fn completion_selection(&self) -> Option<usize> {
+        self.selection
+    }
+
     pub fn with_history_register(&mut self, history_register: Option<char>) -> &mut Self {
         self.history_register = history_register;
         self

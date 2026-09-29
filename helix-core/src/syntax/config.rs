@@ -576,7 +576,7 @@ impl FromStr for AutoPairConfig {
 #[derive(Debug, Clone, Default, PartialEq, Eq, Serialize, Deserialize)]
 #[serde(default, rename_all = "kebab-case", deny_unknown_fields)]
 pub struct SoftWrap {
-    /// Soft wrap lines that exceed viewport width. Default to off
+    /// Soft wrap lines that exceed viewport width. Enabled by default in Gulix.
     // NOTE: Option on purpose because the struct is shared between language config and global config.
     // By default the option is None so that the language config falls back to the global config unless explicitly set.
     pub enable: Option<bool>,
@@ -597,7 +597,7 @@ pub struct SoftWrap {
     pub max_indent_retain: Option<u16>,
     /// Indicator placed at the beginning of softwrapped lines
     ///
-    /// Defaults to ↪
+    /// Defaults to an empty string in Gulix.
     pub wrap_indicator: Option<String>,
     /// Softwrap at `text_width` instead of viewport width if it is shorter
     pub wrap_at_text_width: Option<bool>,

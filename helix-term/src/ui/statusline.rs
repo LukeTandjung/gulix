@@ -50,6 +50,31 @@ pub struct RenderBuffer<'a> {
     pub right: Spans<'a>,
 }
 
+/// Build statusline spans for terminal and native renderers.
+pub fn render_parts(context: &mut RenderContext) {
+    context.parts = RenderBuffer::default();
+    let base_style = context.editor.theme.get(if context.focused {
+        "ui.statusline"
+    } else {
+        "ui.statusline.inactive"
+    });
+    let config = context.editor.config();
+    for element in &config.statusline.left {
+        get_render_function(*element)(context, |context, span| {
+            append(&mut context.parts.left, span, base_style)
+        });
+    }
+    for element in &config.statusline.center {
+        get_render_function(*element)(context, |context, span| {
+            append(&mut context.parts.center, span, base_style)
+        });
+    }
+    for element in &config.statusline.right {
+        get_render_function(*element)(context, |context, span| {
+            append(&mut context.parts.right, span, base_style)
+        });
+    }
+}
 pub fn render(context: &mut RenderContext, viewport: Rect, surface: &mut Surface) {
     let base_style = if context.focused {
         context.editor.theme.get("ui.statusline")
@@ -61,14 +86,7 @@ pub fn render(context: &mut RenderContext, viewport: Rect, surface: &mut Surface
 
     // Left side of the status line.
 
-    let config = context.editor.config();
-
-    for element_id in &config.statusline.left {
-        let render = get_render_function(*element_id);
-        (render)(context, |context, span| {
-            append(&mut context.parts.left, span, base_style)
-        });
-    }
+    render_parts(context);
 
     surface.set_spans(
         viewport.x,
@@ -78,13 +96,6 @@ pub fn render(context: &mut RenderContext, viewport: Rect, surface: &mut Surface
     );
 
     // Right side of the status line.
-
-    for element_id in &config.statusline.right {
-        let render = get_render_function(*element_id);
-        (render)(context, |context, span| {
-            append(&mut context.parts.right, span, base_style)
-        })
-    }
 
     surface.set_spans(
         viewport.x
@@ -97,13 +108,6 @@ pub fn render(context: &mut RenderContext, viewport: Rect, surface: &mut Surface
     );
 
     // Center of the status line.
-
-    for element_id in &config.statusline.center {
-        let render = get_render_function(*element_id);
-        (render)(context, |context, span| {
-            append(&mut context.parts.center, span, base_style)
-        })
-    }
 
     // Width of the empty space between the left and center area and between the center and right area.
     let spacing = 1u16;

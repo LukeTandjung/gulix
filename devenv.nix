@@ -15,6 +15,7 @@ in {
     lld
     openssl
     pkg-config
+    jetbrains-mono
   ]) ++ linuxLibraries;
 
   languages.rust = {
@@ -26,6 +27,7 @@ in {
   env = {
     HELIX_DISABLE_AUTO_GRAMMAR_BUILD = "1";
     HELIX_RUNTIME = "${config.devenv.root}/runtime";
+    FONTCONFIG_FILE = pkgs.makeFontsConf { fontDirectories = [ pkgs.jetbrains-mono ]; };
     LIBCLANG_PATH = "${pkgs.libclang.lib}/lib";
     LD_LIBRARY_PATH = lib.makeLibraryPath linuxLibraries;
     RUST_BACKTRACE = "1";
@@ -33,5 +35,5 @@ in {
 
   tasks."project:check".exec = "cargo check --workspace --all-targets --locked";
   tasks."project:test".exec = "cargo test --workspace --locked";
-  tasks."project:run".exec = "cargo run --bin hx";
+  tasks."project:run".exec = "cargo run --bin hxg";
 }
