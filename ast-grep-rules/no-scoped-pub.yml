@@ -1,0 +1,13 @@
+id: no-scoped-pub
+language: Rust
+severity: error
+message: Do not use Rust scoped visibility; keep items private or make the API explicitly public.
+# Apply Gulix rules only to code owned by this fork, not upstream Helix sources.
+files:
+  - "helix-term/src/typst_preview/**/*.rs"
+  - "helix-term/src/tern_frontend.rs"
+  - "helix-term/src/tern_frontend/**/*.rs"
+  - "helix-term/src/bin/hxt.rs"
+rule:
+  kind: visibility_modifier
+  regex: '^pub\('

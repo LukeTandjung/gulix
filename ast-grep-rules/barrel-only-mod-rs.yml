@@ -1,0 +1,19 @@
+id: barrel-only-mod-rs
+language: Rust
+severity: error
+message: mod.rs files are barrel exports only; move logic into a named sibling file and re-export it.
+# Upstream Helix files predate these Gulix rules and are intentionally excluded.
+files:
+  - "helix-term/src/typst_preview/**/mod.rs"
+  - "helix-term/src/tern_frontend/**/mod.rs"
+rule:
+  any:
+    - kind: function_item
+    - kind: struct_item
+    - kind: enum_item
+    - kind: trait_item
+    - kind: type_item
+    - kind: const_item
+    - kind: static_item
+    - kind: impl_item
+    - kind: macro_definition
