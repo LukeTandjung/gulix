@@ -12,6 +12,9 @@ categories.workspace = true
 repository.workspace = true
 homepage.workspace = true
 
+[package.metadata.verus]
+verify = true
+
 [package.metadata.deb]
 # generate a .deb in target/debian/ with the command: cargo deb --no-build
 name = "helix"
@@ -45,6 +48,10 @@ path = "src/main.rs"
 name = "hxg"
 path = "src/bin/hxg.rs"
 
+[[bin]]
+name = "hxt"
+path = "src/bin/hxt.rs"
+
 [[test]]
 name = "gpui_window"
 path = "tests/gpui_window.rs"
@@ -70,13 +77,22 @@ once_cell = "1.21"
 
 tokio = { version = "1", features = ["rt", "rt-multi-thread", "io-util", "io-std", "time", "process", "macros", "fs", "parking_lot"] }
 tui = { path = "../helix-tui", package = "helix-tui", default-features = false, features = ["termina", "crossterm"] }
+crossterm = { version = "0.28", features = ["event-stream"] }
 termina = { workspace = true, features = ["event-stream"] }
 signal-hook = "0.4"
 tokio-stream = "0.1"
 futures-util = { version = "0.3", features = ["std", "async-await"], default-features = false }
 arc-swap.workspace = true
+base64 = "0.22"
+xmltree = "0.12"
+tern-sdk = "0.1.0"
 termini = "1"
+tempfile.workspace = true
+usvg = { version = "0.46", default-features = false }
+typst-syntax = "0.15.1"
+vstd = "=0.0.0-2026-10-18-0147"
 indexmap = { version = "2.14", features = ["serde"] }
+getset.workspace = true
 
 # Logging
 log = { version = "0.4", features = ["std"] }
@@ -104,9 +120,6 @@ dashmap = "6.2"
 
 parking_lot.workspace = true
 
-[target.'cfg(windows)'.dependencies]
-crossterm = { version = "0.28", features = ["event-stream"] }
-
 [target.'cfg(not(windows))'.dependencies]  # https://github.com/vorner/signal-hook/issues/100
 signal-hook-tokio = { version = "0.4", features = ["futures-v0_3"] }
 libc = "0.2.186"
@@ -115,7 +128,10 @@ libc = "0.2.186"
 helix-loader = { path = "../helix-loader" }
 
 [dev-dependencies]
+quickcheck.workspace = true
 smallvec = "1.15"
 indoc = "2.0.6"
-tempfile.workspace = true
 same-file = "1.0.1"
+
+[lints]
+workspace = true

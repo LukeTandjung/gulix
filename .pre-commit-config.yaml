@@ -1,0 +1,46 @@
+fail_fast: true
+
+repos:
+  - repo: local
+    hooks:
+      - id: cargo-fmt
+        name: cargo fmt --check
+        entry: cargo fmt --check
+        language: system
+        pass_filenames: false
+        stages: [pre-commit]
+
+      - id: ast-grep
+        name: ast-grep scan
+        entry: ast-grep scan --report-style short
+        language: system
+        pass_filenames: false
+        stages: [pre-commit]
+
+      - id: cargo-check
+        name: cargo check --workspace
+        entry: cargo check --workspace --all-targets --locked
+        language: system
+        pass_filenames: false
+        stages: [pre-commit]
+
+      - id: verus
+        name: Verus verify preview contracts
+        entry: devenv tasks run project:verify
+        language: system
+        pass_filenames: false
+        stages: [pre-push]
+
+      - id: cargo-test
+        name: cargo test --workspace
+        entry: cargo test --workspace --locked
+        language: system
+        pass_filenames: false
+        stages: [pre-push]
+
+      - id: cargo-clippy
+        name: cargo clippy --workspace --all-targets
+        entry: cargo clippy --workspace --all-targets --locked
+        language: system
+        pass_filenames: false
+        stages: [pre-push]

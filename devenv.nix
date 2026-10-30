@@ -1,5 +1,6 @@
 { config, lib, pkgs, ... }:
 let
+  verus = pkgs.callPackage ./nix/verus.nix {};
   linuxLibraries = with pkgs; lib.optionals stdenv.isLinux [
     fontconfig
     libx11
@@ -10,13 +11,16 @@ let
   ];
 in {
   packages = (with pkgs; [
+    ast-grep
     clang
     git
     lld
     openssl
     pkg-config
+    pre-commit
     jetbrains-mono
-  ]) ++ linuxLibraries;
+    rustup
+  ]) ++ [ verus ] ++ linuxLibraries;
 
   languages.rust = {
     enable = true;
@@ -35,5 +39,9 @@ in {
 
   tasks."project:check".exec = "cargo check --workspace --all-targets --locked";
   tasks."project:test".exec = "cargo test --workspace --locked";
-  tasks."project:run".exec = "cargo run --bin hxg";
+  tasks."project:run".exec = "cargo run --bin hxt";
+  tasks."verus:setup".exec = "rustup toolchain install ${verus.requiredRustToolchain} --profile minimal";
+  tasks."project:verify".exec = ''
+    cargo verus focus -p helix-term --locked --lib -- --verify-module typst_preview::core::context --verify-module typst_preview::core::state --verify-module typst_preview::core::layout --verify-module typst_preview::ports::renderer --verify-module typst_preview::ports::svg
+  '';
 }

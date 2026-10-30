@@ -58,6 +58,7 @@ globset = "0.4"
 etcetera = "0.11"
 arc-swap = "1.9"
 arrayvec = "0.7"
+getset = "0.1"
 
 # dev dependencies
 criterion = { version = "0.8", default-features = false, features = ["cargo_bench_support"] }
@@ -72,3 +73,6 @@ repository = "https://github.com/helix-editor/helix"
 homepage = "https://helix-editor.com"
 license = "MPL-2.0"
 rust-version = "1.90"
+
+[workspace.lints.rust]
+unexpected_cfgs = { level = "warn", check-cfg = ['cfg(verus_only)'] }
