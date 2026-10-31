@@ -4,6 +4,7 @@ members = [
   "helix-core",
   "helix-view",
   "helix-term",
+  "helix-typst",
   "helix-tui",
   "helix-lsp-types",
   "helix-lsp",
@@ -18,7 +19,8 @@ members = [
 ]
 
 default-members = [
-  "helix-term"
+  "helix-term",
+  "helix-typst",
 ]
 
 [profile.release]

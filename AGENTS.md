@@ -51,9 +51,9 @@ must add behavioural coverage beyond the implementation's verified contracts.
 
 ## Verus
 
-Cargo owns `helix-term`'s pinned `vstd` dependency. Contracts live beside the
+Cargo owns `helix-typst`'s pinned `vstd` dependency. Contracts live beside the
 production functions they constrain, and verified tests live under the matching
-`helix-term/tests/<layer>/` path. Do not create a duplicate abstract model or
+`helix-typst/tests/<layer>/` path. Do not create a duplicate abstract model or
 claim that `todo!()` code is verified. devenv provides only the
 `cargo-verus`/`verus` executables and their required rustup toolchain.
 

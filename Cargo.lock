@@ -3790,11 +3790,9 @@ version = "25.7.1"
 dependencies = [
  "anyhow",
  "arc-swap",
- "base64 0.22.1",
  "crossterm",
  "dashmap",
  "futures-util",
- "getset",
  "gpui",
  "gpui_platform",
  "grep-matcher",
@@ -3829,15 +3827,10 @@ dependencies = [
  "tempfile",
  "termina",
  "termini",
- "tern-sdk",
  "thiserror 2.0.21",
  "tokio",
  "tokio-stream",
  "toml 1.1.2+spec-1.1.0",
- "typst-syntax",
- "usvg",
- "vstd",
- "xmltree",
 ]
 
 [[package]]
@@ -3855,6 +3848,30 @@ dependencies = [
  "termina",
  "termini",
  "unicode-segmentation",
+]
+
+[[package]]
+name = "helix-typst"
+version = "25.7.1"
+dependencies = [
+ "anyhow",
+ "arc-swap",
+ "base64 0.22.1",
+ "crossterm",
+ "getset",
+ "helix-core",
+ "helix-loader",
+ "helix-term",
+ "helix-tui",
+ "helix-view",
+ "quickcheck",
+ "tempfile",
+ "tern-sdk",
+ "tokio",
+ "typst-syntax",
+ "usvg",
+ "vstd",
+ "xmltree",
 ]
 
 [[package]]

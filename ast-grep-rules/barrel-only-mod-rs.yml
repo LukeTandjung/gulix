@@ -4,7 +4,7 @@ severity: error
 message: mod.rs files are barrel exports only; move logic into a named sibling file and re-export it.
 # Upstream Helix files predate these Gulix rules and are intentionally excluded.
 files:
-  - "helix-term/src/typst_preview/**/mod.rs"
+  - "helix-typst/src/**/mod.rs"
   - "helix-term/src/tern_frontend/**/mod.rs"
 rule:
   any:

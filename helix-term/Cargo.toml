@@ -12,9 +12,6 @@ categories.workspace = true
 repository.workspace = true
 homepage.workspace = true
 
-[package.metadata.verus]
-verify = true
-
 [package.metadata.deb]
 # generate a .deb in target/debian/ with the command: cargo deb --no-build
 name = "helix"
@@ -48,10 +45,6 @@ path = "src/main.rs"
 name = "hxg"
 path = "src/bin/hxg.rs"
 
-[[bin]]
-name = "hxt"
-path = "src/bin/hxt.rs"
-
 [[test]]
 name = "gpui_window"
 path = "tests/gpui_window.rs"
@@ -83,16 +76,9 @@ signal-hook = "0.4"
 tokio-stream = "0.1"
 futures-util = { version = "0.3", features = ["std", "async-await"], default-features = false }
 arc-swap.workspace = true
-base64 = "0.22"
-xmltree = "0.12"
-tern-sdk = "0.1.0"
 termini = "1"
 tempfile.workspace = true
-usvg = { version = "0.46", default-features = false }
-typst-syntax = "0.15.1"
-vstd = "=0.0.0-2026-10-18-0147"
 indexmap = { version = "2.14", features = ["serde"] }
-getset.workspace = true
 
 # Logging
 log = { version = "0.4", features = ["std"] }

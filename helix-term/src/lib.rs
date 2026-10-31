@@ -12,8 +12,6 @@ pub mod health;
 pub mod job;
 pub mod keymap;
 pub mod logging;
-pub mod tern_frontend;
-pub mod typst_preview;
 pub mod ui;
 
 #[cfg(not(windows))]
@@ -23,7 +21,7 @@ use std::path::Path;
 use std::process::Stdio;
 
 use futures_util::Future;
-mod handlers;
+pub mod handlers;
 
 use helix_stdx::Url;
 use ignore::DirEntry;
