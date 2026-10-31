@@ -18,10 +18,9 @@ pub enum Msg {
 }
 
 /// Runs Helix inside Tern and coordinates preview rendering.
-pub fn run(path: Option<&Path>) -> anyhow::Result<()> {
+pub fn run(path: Option<&Path>) -> anyhow::Result<bool> {
     let Some(mut session) = Session::<Msg>::connect(Options::new().app("gulix"))? else {
-        println!("hxt needs to run inside Tern; use hx for the terminal frontend.");
-        return Ok(());
+        return Ok(false);
     };
 
     let mut helix = HelixSession::new(path)?;
@@ -152,7 +151,7 @@ pub fn run(path: Option<&Path>) -> anyhow::Result<()> {
 
     session.close()?;
 
-    Ok(())
+    Ok(true)
 }
 
 #[cfg(test)]

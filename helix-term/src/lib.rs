@@ -6,6 +6,7 @@ pub mod args;
 pub mod commands;
 pub mod compositor;
 pub mod config;
+pub mod entry;
 pub mod events;
 pub mod gpui_frontend;
 pub mod health;

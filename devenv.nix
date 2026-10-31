@@ -39,7 +39,7 @@ in {
 
   tasks."project:check".exec = "cargo check --workspace --all-targets --locked";
   tasks."project:test".exec = "cargo test --workspace --locked";
-  tasks."project:run".exec = "cargo run -p helix-typst --bin hxt";
+  tasks."project:run".exec = "cargo run -p helix-typst --bin hx";
   tasks."verus:setup".exec = "rustup toolchain install ${verus.requiredRustToolchain} --profile minimal";
   tasks."project:verify".exec = ''
     cargo verus focus -p helix-typst --locked --lib -- --verify-module core::context --verify-module core::state --verify-module core::layout --verify-module ports::renderer --verify-module ports::svg

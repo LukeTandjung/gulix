@@ -1,7 +1,7 @@
 [package]
 name = "helix-typst"
 description = "Typst previews for Helix inside Tern."
-default-run = "hxt"
+default-run = "hx"
 version.workspace = true
 authors.workspace = true
 edition.workspace = true
@@ -15,8 +15,8 @@ homepage.workspace = true
 verify = true
 
 [[bin]]
-name = "hxt"
-path = "src/bin/hxt.rs"
+name = "hx"
+path = "src/bin/hx.rs"
 
 [dependencies]
 helix-term = { path = "../helix-term" }

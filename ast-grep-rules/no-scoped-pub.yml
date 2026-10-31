@@ -7,7 +7,7 @@ files:
   - "helix-typst/src/**/*.rs"
   - "helix-term/src/tern_frontend.rs"
   - "helix-term/src/tern_frontend/**/*.rs"
-  - "helix-typst/src/bin/hxt.rs"
+  - "helix-typst/src/bin/hx.rs"
 rule:
   kind: visibility_modifier
   regex: '^pub\('
