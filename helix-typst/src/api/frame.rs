@@ -130,6 +130,8 @@ impl<'a> PreviewFrame<'a> {
         let visual_position = |position| {
             visual_offset_from_block(text, view_offset.anchor, position, &text_fmt, &annotations).0
         };
+        let anchor_row = visual_position(view_offset.anchor).row as isize;
+
         let mut layouts: Vec<PreviewLayout> = document
             .presentations(active)
             .into_iter()
@@ -147,9 +149,10 @@ impl<'a> PreviewFrame<'a> {
                 else {
                     return None;
                 };
-                if kind == FragmentKind::InlineMath {
+                if kind == FragmentKind::InlineMath || range.end <= view_offset.anchor {
                     return None;
                 }
+
                 Some(PreviewLayout {
                     id,
                     kind,
@@ -185,12 +188,16 @@ impl<'a> PreviewFrame<'a> {
                 else {
                     return None;
                 };
+                if range.end <= view_offset.anchor {
+                    return None;
+                }
+
                 let start = visual_position(range.start);
                 let end = visual_position(range.end);
                 if start.row != end.row {
                     return None;
                 }
-                let row = viewport_start + start.row as isize - vertical_offset;
+                let row = viewport_start + start.row as isize - anchor_row - vertical_offset;
                 let start_col = inner.x as isize + start.col as isize - horizontal_offset;
                 let end_col = inner.x as isize + end.col as isize - horizontal_offset;
                 if row < viewport_start
@@ -242,9 +249,12 @@ impl<'a> PreviewFrame<'a> {
         let mut consumed_px = 0.0;
         let mut row = 0;
         for layout in layouts {
-            let start = viewport_start + layout.start_row as isize - vertical_offset;
-            let end = viewport_start + layout.end_row as isize - vertical_offset;
-            if end < viewport_start || start >= viewport_end {
+            let start = viewport_start + layout.start_row as isize - anchor_row - vertical_offset;
+            let end = viewport_start + layout.end_row as isize - anchor_row - vertical_offset;
+
+            // A full SVG cannot be clipped at the viewport's top edge. Skipping it here
+            // prevents a partially off-screen preview from being pinned to that edge.
+            if start < viewport_start || start >= viewport_end {
                 continue;
             }
             let replace_start = start.max(viewport_start).max(0) as usize;
@@ -340,6 +350,12 @@ impl<'a> PreviewFrame<'a> {
         let cells = &buffer.content()[row * width..(row + 1) * width];
         let mut children = Vec::new();
         let mut column = 0;
+        let row_height_px = layouts
+            .iter()
+            .map(|layout| f64::from(layout.rendered.intrinsic_height_px))
+            .fold(cell_height_px, f64::max)
+            .ceil();
+
         for layout in layouts {
             if column < layout.start_col {
                 children.push(Self::ansi_segment(
@@ -351,15 +367,21 @@ impl<'a> PreviewFrame<'a> {
                 layout.rendered.svg.clone().into_bytes(),
                 Some("image/svg+xml"),
             )?;
-            let width_px = f64::from(layout.rendered.intrinsic_width_px).max(1.0);
+            let width_px = f64::from(layout.rendered.intrinsic_width_px)
+                .ceil()
+                .max(1.0);
+            let height_px = f64::from(layout.rendered.intrinsic_height_px)
+                .ceil()
+                .max(1.0);
+
             children.push(
                 ui::image()
                     .key(format!("fragment-{}", layout.id.0))
                     .blob(blob)
                     .w(width_px)
-                    .h(cell_height_px.ceil())
-                    .min(Bound::h(Extent::Lines(1.0)))
-                    .max(Bound::h(Extent::Lines(1.0)))
+                    .h(height_px)
+                    .min(Bound::h(Extent::Lines(height_px / cell_height_px)))
+                    .max(Bound::h(Extent::Lines(height_px / cell_height_px)))
                     .grow(0.0)
                     .shrink(0.0)
                     .basis(ui::Basis::Content)
@@ -372,9 +394,13 @@ impl<'a> PreviewFrame<'a> {
         if column < width {
             children.push(Self::ansi_segment(&cells[column..], width - column)?);
         }
+        let row_height_lines = row_height_px / cell_height_px;
+
         Ok(ui::row()
             .gap(ui::Gap::None)
             .align(ui::Align::Baseline)
+            .min(Bound::h(Extent::Lines(row_height_lines)))
+            .max(Bound::h(Extent::Lines(row_height_lines)))
             .children(children)
             .into())
     }

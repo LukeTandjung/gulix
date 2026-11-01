@@ -40,7 +40,7 @@ pub const DEFAULT_SETTINGS: TypstSettings<'static> = TypstSettings {
     fonts: BUNDLED_FONTS,
     math_font: "Inter Math",
     body_font: "IBM Plex Mono",
-    math_font_scale: 1.15,
+    math_font_scale: 1.0,
     construct_rules: true,
     inline_margin_pt: 0.0,
     block_margin_pt: 1.0,

@@ -87,7 +87,7 @@ quickcheck! {
             bounds.left >= -epsilon
                 && bounds.top >= -epsilon
                 && bounds.right <= rendered.intrinsic_width_px + epsilon
-                && bounds.bottom <= rendered.intrinsic_height_px + epsilon,
+                && bounds.bottom <= rendered.intrinsic_height_px - 1.0 + epsilon,
             "ink escaped canvas: {bounds:?}; dimensions: {}x{}; SVG: {}",
             rendered.intrinsic_width_px,
             rendered.intrinsic_height_px,

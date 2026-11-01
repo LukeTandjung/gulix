@@ -165,7 +165,7 @@ impl SvgProcessor for UsvgProcessor {
         document: Self::Document,
         ink: InkBounds,
     ) -> Result<RenderedFragment, Self::Error> {
-        const MARGIN_PX: f32 = 0.5;
+        const MARGIN_PX: f32 = 1.0;
         let InkBounds {
             left,
             top,
