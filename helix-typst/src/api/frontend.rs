@@ -100,6 +100,10 @@ pub fn run(path: Option<&Path>) -> anyhow::Result<bool> {
                 let previous_source = helix.current_rope();
                 helix.dispatch_key(&key);
 
+                if helix.editor.should_close() {
+                    break;
+                }
+
                 let source = helix.current_rope();
                 if source != previous_source {
                     document
@@ -111,10 +115,6 @@ pub fn run(path: Option<&Path>) -> anyhow::Result<bool> {
                     {
                         active.deactivate(&mut document);
                     }
-                }
-
-                if helix.editor.should_close() {
-                    break;
                 }
             }
             Input::Msg(Msg::Reveal(id), _) => active.reveal(id, &mut document, &mut helix),
