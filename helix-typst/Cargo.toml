@@ -1,0 +1,45 @@
+[package]
+name = "helix-typst"
+description = "Typst previews for Helix inside Tern."
+default-run = "hx"
+version.workspace = true
+authors.workspace = true
+edition.workspace = true
+license.workspace = true
+rust-version.workspace = true
+categories.workspace = true
+repository.workspace = true
+homepage.workspace = true
+
+[package.metadata.verus]
+verify = true
+
+[[bin]]
+name = "hx"
+path = "src/bin/hx.rs"
+
+[dependencies]
+helix-term = { path = "../helix-term" }
+helix-core = { path = "../helix-core" }
+helix-view = { path = "../helix-view" }
+helix-loader = { path = "../helix-loader" }
+
+anyhow = "1"
+tokio = { version = "1", features = ["rt", "rt-multi-thread", "io-util", "io-std", "time", "process", "macros", "fs", "parking_lot"] }
+tui = { path = "../helix-tui", package = "helix-tui", default-features = false, features = ["termina", "crossterm"] }
+crossterm = { version = "0.28", features = ["event-stream"] }
+arc-swap.workspace = true
+base64 = "0.22"
+xmltree = "0.12"
+tern-sdk = "0.1.0"
+tempfile.workspace = true
+usvg = { version = "0.46", default-features = false }
+typst-syntax = "0.15.1"
+vstd = "=0.0.0-2026-10-18-0147"
+getset.workspace = true
+
+[dev-dependencies]
+quickcheck.workspace = true
+
+[lints]
+workspace = true

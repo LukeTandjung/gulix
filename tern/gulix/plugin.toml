@@ -1,0 +1,6 @@
+schema = 1
+id = "gulix"
+name = "Gulix"
+version = "0.1.0"
+description = "Integrates Gulix surface focus and full-width layout with Tern."
+window = "window.luau"

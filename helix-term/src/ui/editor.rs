@@ -70,6 +70,10 @@ impl EditorView {
         }
     }
 
+    pub fn has_completion(&self) -> bool {
+        self.completion.is_some()
+    }
+
     pub fn spinners_mut(&mut self) -> &mut ProgressSpinners {
         &mut self.spinners
     }

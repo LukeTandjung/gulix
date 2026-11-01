@@ -6,6 +6,7 @@ pub mod args;
 pub mod commands;
 pub mod compositor;
 pub mod config;
+pub mod entry;
 pub mod events;
 pub mod gpui_frontend;
 pub mod health;
@@ -21,7 +22,7 @@ use std::path::Path;
 use std::process::Stdio;
 
 use futures_util::Future;
-mod handlers;
+pub mod handlers;
 
 use helix_stdx::Url;
 use ignore::DirEntry;
