@@ -4,6 +4,7 @@
   callPackage,
   runCommand,
   installShellFiles,
+  fetchzip,
   git,
   gitRev ? null,
   grammarOverlays ? [],
@@ -38,12 +39,27 @@
   '';
 in
   rustPlatform.buildRustPackage (self: {
-    cargoLock = {
+    # Cargo's Git dependencies share repositories. Fetch one pinned archive per
+    # revision, not all Git refs/history during evaluation. These hashes cover
+    # unpacked archives; they are not fetchgit (submodule-inclusive) hashes.
+    cargoDeps = (rustPlatform.importCargoLock.override {
+      fetchgit = {url, rev, sha256}: let
+        github = builtins.match "https://github.com/([^/]+)/([^/]+)" url;
+      in
+        if github == null then
+          throw "Gulix Cargo archive fetcher only supports GitHub repositories: ${url}"
+        else fetchzip {
+          url = "https://github.com/${builtins.elemAt github 0}/${lib.removeSuffix ".git" (builtins.elemAt github 1)}/archive/${rev}.tar.gz";
+          inherit sha256;
+        };
+    }) {
       lockFile = ./Cargo.lock;
-      # This is not allowed in nixpkgs but is very convenient here: it allows us to
-      # avoid specifying `outputHashes` here for any git dependencies we might take
-      # on temporarily.
-      allowBuiltinFetchGit = true;
+      outputHashes = {
+        "gpui-0.2.2" = "19hf071brxhf1gij8dm9l6c0hb81haa6fd6fbs45jqqaq9858x6g";
+        "xim-ctext-0.3.0" = "14cyxxdgjpbkf8ny4c46cfqjinavi2cyxzwfngldlls97m5zh555";
+        "zed-font-kit-0.14.1-zed" = "07jxxm5g2ighb2f3z383ydnfvl4hfaanh7ngr2whhd959a5s0z19";
+        "zed-scap-0.0.8-zed" = "0k7fvdxxj0nb1046gvcn82qrd96xi10pywjbna8zg5ssg5064a06";
+      };
     };
 
     propagatedBuildInputs = [ runtimeDir ];
