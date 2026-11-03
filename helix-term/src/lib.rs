@@ -8,7 +8,6 @@ pub mod compositor;
 pub mod config;
 pub mod entry;
 pub mod events;
-pub mod gpui_frontend;
 pub mod health;
 pub mod job;
 pub mod keymap;
